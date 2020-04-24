@@ -6,7 +6,7 @@ use core::mem;
 #[inline]
 ///Returns size of the value at compile time.
 ///
-///Doesn't work with unsized types as they can be only evaluated at compile time.
+///Doesn't work with unsized types as they can be only evaluated at runtime.
 pub const fn size_of<T>(_: &T) -> usize {
     mem::size_of::<T>()
 }
@@ -14,7 +14,7 @@ pub const fn size_of<T>(_: &T) -> usize {
 #[inline]
 ///Returns minimum alignment of the value at compile time..
 ///
-///Doesn't work with unsized types as they can be only evaluated at compile time.
+///Doesn't work with unsized types as they can be only evaluated at runtime..
 pub const fn align_of<T>(_: &T) -> usize {
     mem::align_of::<T>()
 }
@@ -22,7 +22,7 @@ pub const fn align_of<T>(_: &T) -> usize {
 #[inline]
 ///Returns whether value requires a drop.
 ///
-///Doesn't work with unsized types as they can be only evaluated at compile time.
+///Doesn't work with unsized types as they can be only evaluated at runtime..
 pub const fn needs_drop<T>(_: &T) -> bool {
     mem::needs_drop::<T>()
 }
