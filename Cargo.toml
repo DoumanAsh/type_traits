@@ -1,0 +1,12 @@
+[package]
+name = "type_traits"
+version = "0.1.0"
+authors = ["Douman <douman@gmx.se>"]
+edition = "2018"
+repository = "https://github.com/DoumanAsh/type_traits"
+documentation = "https://docs.rs/type_traits/"
+categories = ["no-std"]
+keywords = ["type", "traits"]
+readme = "README.md"
+description = "Collection of utilities related to types and their properties"
+license = "BSL-1.0"
