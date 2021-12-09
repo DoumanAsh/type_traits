@@ -4,17 +4,23 @@
 use core::mem;
 
 #[inline]
+///Returns whether type of value is zero sized.
+pub const fn is_zst<T>(_: &T) -> bool {
+    mem::size_of::<T>() == 0
+}
+
+#[inline]
 ///Returns size of the value at compile time.
 ///
-///Doesn't work with unsized types as they can be only evaluated at runtime.
-pub const fn size_of<T: Sized>(_: &T) -> usize {
+///Doesn't work with unsized values as they can be only evaluated at runtime.
+pub const fn size_of<T>(_: &T) -> usize {
     mem::size_of::<T>()
 }
 
 #[inline]
 ///Returns minimum alignment of the value at compile time..
 ///
-///Doesn't work with unsized types as they can be only evaluated at runtime..
+///Doesn't work with unsized values as they can be only evaluated at runtime.
 pub const fn align_of<T>(_: &T) -> usize {
     mem::align_of::<T>()
 }
@@ -22,7 +28,7 @@ pub const fn align_of<T>(_: &T) -> usize {
 #[inline]
 ///Returns whether value requires a drop.
 ///
-///Doesn't work with unsized types as they can be only evaluated at runtime..
+///Doesn't work with unsized values as they can be only evaluated at runtime..
 pub const fn needs_drop<T>(_: &T) -> bool {
     mem::needs_drop::<T>()
 }
@@ -44,11 +50,11 @@ pub const fn needs_drop<T>(_: &T) -> bool {
 ///assert_eq!(size_of!(array.len()), size_of!(usize));
 ///```
 ///
-///This will fail to compile because Rust macro system is actually just syntax replacement
-///It is not aware about actual properties of passed arguments
+///This will fail to compile because Rust macro system is actually just syntax replacement.
+///It is not aware about actual properties of passed arguments.
 ///
-///Anything that resembles type, will be tired as such
-///As Rust lacks any utility to get type out of expression, you have to work it around by tricking
+///Anything that resembles type, will be tired as such.
+///As Rust lacks any utility to get type out of expression, you have to work it around by tricking.
 ///macro into making something expression.
 ///
 ///```compile_fail
@@ -121,7 +127,7 @@ macro_rules! align_of {
 }
 
 #[macro_export]
-///Returns minimum alignment of the value at compile time..
+///Returns whether type requires drop.
 ///
 ///Accepts both type and value.
 ///
