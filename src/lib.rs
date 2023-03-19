@@ -38,6 +38,9 @@ impl<T> Type<T> {
 
 ///Static assertion helper
 ///
+///This assertion relies on the fact that generic code is always compiled when generic is actually
+///used, hence on its own every constant within `Assert` would not produce compile error, even if
+///you refer to concrete instance of `Assert`
 ///In order to perform assertion, you must use associated constant, otherwise generic constant is not evaluated.
 #[repr(transparent)]
 pub struct Assert<T>(marker::PhantomData<T>);
@@ -95,7 +98,10 @@ impl<T> Assert<T> {
 
 ///Static assertion helper for pair of types
 ///
-///In order to perform assertion, you must use associated constant.
+///This assertion relies on the fact that generic code is always compiled when generic is actually
+///used, hence on its own every constant within `Assert` would not produce compile error, even if
+///you refer to concrete instance of `Assert`
+///In order to perform assertion, you must use associated constant, otherwise generic constant is not evaluated.
 #[repr(transparent)]
 pub struct Assert2<L, R>(marker::PhantomData<(L, R)>);
 
@@ -149,6 +155,23 @@ impl<L, R> Assert2<L, R> {
     ///```
     pub const IS_LEFT_SIZE_GREATER_OR_EQUAL: () = assert!(Type::<L>::size() >= Type::<R>::size());
 
+    ///Asserts that `L` size is less that of `R`
+    ///
+    ///## Usage
+    ///
+    ///```
+    ///use type_traits::{Type, Assert2};
+    ///
+    ///fn test<T, O>(input: T, default: O) -> O {
+    ///    assert!(Type::<T>::size() < Type::<O>::size());
+    ///    let _ = Assert2::<T, O>::IS_LEFT_SIZE_LESS;
+    ///    default
+    ///}
+    ///
+    ///test(false, 0u32);
+    ///```
+    pub const IS_LEFT_SIZE_LESS: () = assert!(Type::<L>::size() < Type::<R>::size());
+
     ///Asserts that `L` minimum alignment is greater or equal to `R`
     ///
     ///## Usage
@@ -165,4 +188,21 @@ impl<L, R> Assert2<L, R> {
     ///test(0u32, false);
     ///```
     pub const IS_LEFT_ALIGN_GREATER_OR_EQUAL: () = assert!(Type::<L>::align() >= Type::<R>::align());
+
+    ///Asserts that `L` minimum alignment is less that of `R`
+    ///
+    ///## Usage
+    ///
+    ///```
+    ///use type_traits::{Type, Assert2};
+    ///
+    ///fn test<T, O>(input: T, default: O) -> O {
+    ///    assert!(Type::<T>::align() < Type::<O>::align());
+    ///    let _ = Assert2::<T, O>::IS_LEFT_ALIGN_LESS;
+    ///    default
+    ///}
+    ///
+    ///test(0u8, 0u32);
+    ///```
+    pub const IS_LEFT_ALIGN_LESS: () = assert!(Type::<L>::align() < Type::<R>::align());
 }
