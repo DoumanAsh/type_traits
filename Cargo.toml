@@ -10,3 +10,9 @@ keywords = ["type", "traits"]
 readme = "README.md"
 description = "Collection of utilities related to types and their properties"
 license = "BSL-1.0"
+include = [
+    "**/*.rs",
+    "Cargo.toml",
+    "README.md",
+    "LICENSE"
+]
