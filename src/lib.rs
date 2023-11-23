@@ -11,6 +11,52 @@ use core::{mem, marker};
 pub struct Type<T>(marker::PhantomData<T>);
 
 impl<T> Type<T> {
+    #[inline(always)]
+    ///Get type id (different from [TypeId](https://doc.rust-lang.org/core/any/struct.TypeId.html))
+    ///
+    ///Collision points:
+    /// - Lifetime - change of lifetime doesn't change type.
+    ///
+    ///```
+    ///use type_traits::Type;
+    ///
+    ///macro_rules! impl_test_for_types {
+    ///    ($($typ:ty),+) => {
+    ///        let mut map = std::collections::HashMap::new();
+    ///        let mut name;
+    ///        $(
+    ///            name = stringify!($typ);
+    ///            if let Some(unexpected) = map.insert(Type::<$typ>::id(), name) {
+    ///                panic!("{} has id collision with {}", name, unexpected);
+    ///            }
+    ///
+    ///            if let Some(unexpected) = map.insert(Type::<Type<$typ>>::id(), name) {
+    ///                panic!("Type<{}> has id collision with {}", name, unexpected);
+    ///            }
+    ///        )+
+    ///    };
+    ///}
+    ///
+    ///impl_test_for_types!(
+    ///   (), core::marker::PhantomData<()>,
+    ///   u8, i8,
+    ///   String,
+    ///   u16, i16,
+    ///   u32, i32,
+    ///   u64, i64,
+    ///   u128, i128,
+    ///   &'static str, &u8,
+    ///   Box<dyn core::fmt::Debug>,
+    ///   Box<dyn core::fmt::Debug + Send>,
+    ///   Box<dyn core::fmt::Debug + Send + Sync>,
+    ///   for<'a> fn(&'a (), &'a ()),
+    ///   fn(())
+    ///);
+    ///```
+    pub fn id() -> usize {
+        core::any::type_name::<T>().as_ptr() as usize
+    }
+
     ///Returns object size
     #[inline(always)]
     pub const fn size() -> usize {
